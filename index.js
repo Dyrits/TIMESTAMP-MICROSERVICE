@@ -14,11 +14,10 @@ app.get("/", function (request, response) {
 app.get("/api/hello", function (request, response) {
   response.json({greeting: "hello API"});
 });
-app.get("/api/:input", function ({ params}, response) {
-    const { input } = params;
-    const $date = new Date(isNaN(input) ? input : Number(input));
-    const date = isNaN($date.getTime()) ? { error: "Invalid date" } : { unix: $date.getTime(), utc: $date.toUTCString() }
-    response.json(date);
+app.get("/api/:date", function ({ params}, response) {
+    const { date } = params;
+    const $date = new Date(isNaN(date) ? date : Number(date));
+    response.json(isNaN($date.getTime()) ? { error: "Invalid date" } : { unix: $date.getTime(), utc: $date.toUTCString() });
 });
 
 
