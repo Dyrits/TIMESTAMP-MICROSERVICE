@@ -11,15 +11,13 @@ app.get("/", function (request, response) {
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/api/hello", function (request, response) {
-  response.json({ greeting: "hello API" });
+app.get("/api/:date?", function ({ params }, response) {
+    if (params.date) {
+        const date = new Date(isNaN(params.date) ? params.date : Number(params.date));
+        return response.json(isNaN(date.getTime()) ? { error: "Invalid date" } : { unix: date.getTime(), utc: date.toUTCString() });
+    }
+    return response.json({ unix: Date.now(), utc: new Date().toUTCString() });
 });
-app.get("/api/:date", function ({ params}, response) {
-    const { date } = params;
-    const $date = new Date(isNaN(date) ? date : Number(date));
-    response.json(isNaN($date.getTime()) ? { error: "Invalid date" } : { unix: $date.getTime(), utc: $date.toUTCString() });
-});
-
 
 const listener = app.listen(process.env.PORT, function () {
   console.log(`Your app is listening on port ${listener.address().port}`);
